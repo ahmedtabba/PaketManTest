@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Npgsql;
 using PaketMan.Models;
 
-namespace PaketMan.Repository
+namespace PaketMan.Services
 {
     public class UserStore : IUserStore<ApplicationUser>, IUserEmailStore<ApplicationUser>, IUserPhoneNumberStore<ApplicationUser>,
      IUserTwoFactorStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>,IUserRoleStore<ApplicationUser>

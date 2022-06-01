@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using PaketMan.Contracts;
 using PaketMan.Models;
 using PaketMan.Models.Api;
+using PaketMan.Models.Api.Identity;
 
 namespace PaketMan.Controllers
 {

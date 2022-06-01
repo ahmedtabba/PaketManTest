@@ -6,7 +6,7 @@ using Microsoft.OpenApi.Models;
 using PaketMan.Context;
 using PaketMan.Contracts;
 using PaketMan.Models;
-using PaketMan.Repository;
+using PaketMan.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);

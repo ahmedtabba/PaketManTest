@@ -6,7 +6,7 @@ using PaketMan.Models;
 using PaketMan.Utallites;
 using System.Data;
 
-namespace PaketMan.Repository
+namespace PaketMan.Services
 {
     public class RestaurantRepository: IRestaurantRepository
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PaketMan.Models.Api
+namespace PaketMan.Models.Api.Identity
 {
     public class LoginViewModel
     {

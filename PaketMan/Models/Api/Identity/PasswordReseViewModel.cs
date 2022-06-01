@@ -1,10 +1,14 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace PaketMan.Models.Api
+namespace PaketMan.Models.Api.Identity
 {
-    public class MyPasswordReseViewModel
+    public class PasswordReseViewModel
     {
+        public string Email { get; set; }
+
+        //public string Token {get; set;}
+
         [DataType(DataType.Password)]
         [Required(ErrorMessage = "The Password cannot be empty.")]
         [DisplayName("Password")]

@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace PaketMan.Repository
+namespace PaketMan.Services
 {
     public class IdentityService : IIdentityService
     {

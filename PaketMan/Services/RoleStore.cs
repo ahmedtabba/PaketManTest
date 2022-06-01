@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Npgsql;
 using PaketMan.Models;
 
-namespace PaketMan.Repository
+namespace PaketMan.Services
 {
     public class RoleStore : IRoleStore<ApplicationRole>
     {
