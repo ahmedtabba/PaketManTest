@@ -66,3 +66,10 @@ C:\Users\Ahmed\Desktop\PaketMan\PaketMan\obj\Debug\net6.0\refint\PaketMan.dll
 C:\Users\Ahmed\Desktop\PaketMan\PaketMan\obj\Debug\net6.0\PaketMan.pdb
 C:\Users\Ahmed\Desktop\PaketMan\PaketMan\obj\Debug\net6.0\PaketMan.genruntimeconfig.cache
 C:\Users\Ahmed\Desktop\PaketMan\PaketMan\obj\Debug\net6.0\ref\PaketMan.dll
+C:\Users\Ahmed\Desktop\PaketMan\PaketMan\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Ahmed\Desktop\PaketMan\PaketMan\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Ahmed\Desktop\PaketMan\PaketMan\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\Ahmed\Desktop\PaketMan\PaketMan\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Ahmed\Desktop\PaketMan\PaketMan\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\Ahmed\Desktop\PaketMan\PaketMan\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Ahmed\Desktop\PaketMan\PaketMan\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll

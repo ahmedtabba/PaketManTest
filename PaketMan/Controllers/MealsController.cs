@@ -6,7 +6,8 @@ using PaketMan.Models;
 using PaketMan.Models.Api;
 using PaketMan.Models.Api.Meal;
 using PaketMan.Extensions;
-
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace PaketMan.Controllers
 {
@@ -23,6 +24,7 @@ namespace PaketMan.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetMeals([FromQuery] MealRequestParams filter)
         {
             try
