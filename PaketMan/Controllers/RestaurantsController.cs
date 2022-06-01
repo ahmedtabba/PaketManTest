@@ -58,6 +58,7 @@ namespace PaketMan.Controllers
 
         [HttpGet]
         [Route("getAllRestaurantWithDetails")]
+        [ResponseCache(CacheProfileName = "Default30")]
         public async Task<IActionResult> GetRestaurantsWithDetails([FromQuery] RestaurantRequestParams filter)
         {
             try

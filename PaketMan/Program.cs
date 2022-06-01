@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PaketMan.Context;
@@ -27,16 +28,16 @@ builder.Services.AddTransient<RoleManager<ApplicationRole>>();
 builder.Services.AddTransient<UserManager<ApplicationUser>>();
 
 
+builder.Services.AddResponseCaching();
+builder.Services.AddControllers(options =>
+{
+    options.CacheProfiles.Add("Default30",
+        new CacheProfile()
+        {
+            Duration = 30
+        });
+});
 
-
-
-
-//services.AddDefaultIdentity<PortalUser>()
-//    .AddRoles<IdentityRole>()
-
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -123,12 +124,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-
-
-
 }
 
-
+app.UseResponseCaching();
 
 app.UseAuthorization();
 

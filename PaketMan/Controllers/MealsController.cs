@@ -24,13 +24,12 @@ namespace PaketMan.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetMeals([FromQuery] MealRequestParams filter)
         {
             try
             {
                 var validFilter = new MealRequestParams(filter.PageNumber, filter.PageSize);
-                var pagedData = await _mealRepository.GetAll();
+                var pagedData = filter.RestaurantId.HasValue? await _mealRepository.GetByRestaurantId(filter.RestaurantId.Value) : await _mealRepository.GetAll();
 
                 if (!string.IsNullOrWhiteSpace(validFilter.SearchText))
                     pagedData = pagedData.Where(x => x.Name.Contains(validFilter.SearchText));
@@ -60,6 +59,7 @@ namespace PaketMan.Controllers
         }
 
         [HttpGet("{id}", Name = "MealById")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetMeal(int id)
         {
             try

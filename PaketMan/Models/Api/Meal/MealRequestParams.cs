@@ -6,6 +6,8 @@ namespace PaketMan.Models.Api.Meal
     {
         [JsonProperty("searchText")]
         public string? SearchText { get; set; }
+        [JsonProperty("restaurantId")]
+        public int? RestaurantId { get; set; }
         [JsonProperty("sort")]
         public string? Sort { get; set; }
 

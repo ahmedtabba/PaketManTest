@@ -65,6 +65,25 @@ namespace PaketMan.Repository
             }
         }
 
+        public async Task<IQueryable<Meal>> GetByRestaurantId(int restaurantId)
+        {
+            try
+            {
+                var query = $"SELECT * FROM \"{Consts.Meals}\" WHERE \"RestaurantId\" = @RestaurantId;";
+                using (var connection = _context.CreateConnection())
+                {
+                    connection.Open();
+                    var meals = await connection.QueryAsync<Meal>(query, new { restaurantId });
+                    return meals.AsQueryable();
+                }
+            }
+            catch
+            {
+
+                throw;
+            }
+        }
+
         public async Task<Meal> GetById(int id)
         {
             try
