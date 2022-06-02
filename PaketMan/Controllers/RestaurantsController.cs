@@ -161,6 +161,12 @@ namespace PaketMan.Controllers
                     });
 
 
+                var errors = await _restaurantRepository.IsValid(restaurant);
+                if(!string.IsNullOrWhiteSpace(errors))
+                    return BadRequest(new FailedResponse
+                    {
+                        Errors = new [] { errors }
+                    });
 
                 var createdRestaurant = await _restaurantRepository.Create(restaurant);
                 return CreatedAtRoute("GetById", new { id = createdRestaurant.Id }, createdRestaurant);
@@ -191,6 +197,14 @@ namespace PaketMan.Controllers
                 var dbCompany = await _restaurantRepository.GetByIdAsync(id);
                 if (dbCompany == null)
                     return NotFound();
+
+                var errors = await _restaurantRepository.IsValid(id, restaurant);
+                if (!string.IsNullOrWhiteSpace(errors))
+                    return BadRequest(new FailedResponse
+                    {
+                        Errors = new[] { errors }
+                    });
+
                 await _restaurantRepository.Update(id, restaurant);
                 return NoContent();
             }

@@ -8,7 +8,7 @@ using System.Data;
 
 namespace PaketMan.Services
 {
-    public class RestaurantRepository: IRestaurantRepository
+    public class RestaurantRepository : IRestaurantRepository
     {
         private readonly DapperContext _context;
         public RestaurantRepository(DapperContext context)
@@ -19,24 +19,26 @@ namespace PaketMan.Services
         public async Task<Restaurant> Create(RestaurantCreateDto restaurant)
         {
 
-            var query = $"INSERT INTO \"{Consts.Restaurants}\" (\"Name\", \"City\", \"Description\") VALUES (@Name, @City, @Description) RETURNING \"Id\";" ;
+            var query = $"INSERT INTO \"{Consts.Restaurants}\" (\"Name\", \"City\", \"Description\",\"OwnerId\") VALUES (@Name, @City, @Description,@OwnerId) RETURNING \"Id\";";
             var parameters = new DynamicParameters();
             parameters.Add("Name", restaurant.Name, DbType.String);
             parameters.Add("City", restaurant.City, DbType.String);
             parameters.Add("Description", restaurant.Description, DbType.String);
+            parameters.Add("OwnerId", restaurant.OwnerId, DbType.Int32);
             using (var connection = _context.CreateConnection())
             {
-                var id= await connection.QuerySingleAsync<int>(query, parameters);
+                var id = await connection.QuerySingleAsync<int>(query, parameters);
                 var createdRestaurant = new Restaurant
                 {
                     Id = id,
                     Name = restaurant.Name,
                     City = restaurant.City,
-                    Description = restaurant.Description
+                    Description = restaurant.Description,
+                    OwnerId = restaurant.OwnerId
                 };
                 return createdRestaurant;
             }
-           
+
         }
 
         public async Task Delete(int id)
@@ -132,16 +134,62 @@ namespace PaketMan.Services
 
         public async Task Update(int id, RestaurantUpdateDto restaurant)
         {
-            var query = $"UPDATE \"{Consts.Restaurants}\" SET \"Name\" = @Name, \"City\" = @City, \"Description\" = @Description WHERE \"Id\" = @Id";
+            var query = $"UPDATE \"{Consts.Restaurants}\" SET \"Name\" = @Name, \"City\" = @City, \"Description\" = @Description, \"OwnerId\" = @OwnerId WHERE \"Id\" = @Id";
             var parameters = new DynamicParameters();
             parameters.Add("Id", id, DbType.Int32);
             parameters.Add("Name", restaurant.Name, DbType.String);
             parameters.Add("City", restaurant.City, DbType.String);
             parameters.Add("Description", restaurant.Description, DbType.String);
+            parameters.Add("OwnerId", restaurant.OwnerId, DbType.Int32);
             using (var connection = _context.CreateConnection())
             {
                 await connection.ExecuteAsync(query, parameters);
             }
+        }
+
+        public async Task<string> IsValid(RestaurantCreateDto obDto)
+        {
+            var res = "";
+
+
+
+            res = await CheckRestaurantOwnerValidation(obDto.OwnerId);
+            return Task.FromResult(res).Result;
+        }
+
+        public async Task<string> IsValid(int id, RestaurantUpdateDto obDto)
+        {
+            string res = "";
+
+            res = await CheckRestaurantOwnerValidation(obDto.OwnerId, id);
+
+            return Task.FromResult(res).Result;
+        }
+
+        private async Task<string> CheckRestaurantOwnerValidation(int OwnerId, int? id = null)
+        {
+            string res = "";
+            var query = "";
+            Restaurant restaurant = null;
+            using (var connection = _context.CreateConnection())
+            {
+                if (id.HasValue)
+                {
+                    query = $"SELECT * FROM \"{Consts.Restaurants}\" WHERE \"OwnerId\" = @OwnerId And \"Id\"!=@Id";
+                    restaurant = await connection.QuerySingleOrDefaultAsync<Restaurant>(query, new { OwnerId, id });
+                }
+                else
+                {
+                    query = $"SELECT * FROM \"{Consts.Restaurants}\" WHERE \"OwnerId\" = @OwnerId";
+                    restaurant = await connection.QuerySingleOrDefaultAsync<Restaurant>(query, new { OwnerId });
+                }
+
+
+                if (restaurant != null)
+                    res = "This User is already linked with another restaurant!!";
+            }
+
+            return res;
         }
     }
 }

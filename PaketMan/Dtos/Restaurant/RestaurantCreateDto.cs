@@ -10,5 +10,7 @@ namespace PaketMan.Dtos.Restaurant
         public string City { get; set; }
         [Required(AllowEmptyStrings = false)]
         public string Description { get; set; }
+        [Required]
+        public int OwnerId { get; set; }
     }
 }
