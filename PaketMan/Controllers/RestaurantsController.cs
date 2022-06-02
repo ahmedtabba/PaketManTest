@@ -24,24 +24,23 @@ namespace PaketMan.Controllers
         {
             try
             {
-                var validFilter = new RestaurantRequestParams(filter.PageNumber, filter.PageSize);
                 var pagedData = await _restaurantRepository.GetAll();
 
-                if (!string.IsNullOrWhiteSpace(validFilter.SearchText))
-                    pagedData = pagedData.Where(x => x.Description.Contains(validFilter.SearchText) || x.Name.Contains(validFilter.SearchText));
+                if (!string.IsNullOrWhiteSpace(filter.SearchText))
+                    pagedData = pagedData.Where(x => x.Description.Contains(filter.SearchText) || x.Name.Contains(filter.SearchText));
 
 
                 pagedData = pagedData.OrderBy(filter.Sort);
 
 
 
-                pagedData = pagedData.Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
-                    .Take(validFilter.PageSize);
+                pagedData = pagedData.Skip((filter.PageNumber - 1) * filter.PageSize)
+                    .Take(filter.PageSize);
 
                 var totalRecords = (await _restaurantRepository.GetAll()).Count();
-                var totalPagees = Math.Ceiling((decimal)totalRecords / validFilter.PageSize);
+                var totalPagees = Math.Ceiling((decimal)totalRecords / filter.PageSize);
 
-                return Ok(new PagedResponse<List<Restaurant>>(pagedData.ToList(), validFilter.PageNumber, validFilter.PageSize) { TotalRecords = totalRecords, TotalPages = (int)totalPagees });
+                return Ok(new PagedResponse<List<Restaurant>>(pagedData.ToList(), filter.PageNumber, filter.PageSize) { TotalRecords = totalRecords, TotalPages = (int)totalPagees });
 
 
                

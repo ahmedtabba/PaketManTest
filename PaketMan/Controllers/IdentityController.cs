@@ -7,6 +7,7 @@ using PaketMan.Contracts;
 using PaketMan.Models;
 using PaketMan.Models.Api;
 using PaketMan.Models.Api.Identity;
+using PaketMan.Extensions;
 
 namespace PaketMan.Controllers
 {
@@ -21,6 +22,42 @@ namespace PaketMan.Controllers
             _IdentityService = IdentityService;
             _userManager = userManager;
         }
+
+        [HttpGet]
+        [Route("/api/Users")]
+        public async Task<IActionResult> GetUsers([FromQuery] IdentityRequestParams filter)
+        {
+            try
+            {
+                var pagedData =  _userManager.Users;
+
+                if (!string.IsNullOrWhiteSpace(filter.SearchText))
+                    pagedData = pagedData.Where(x => x.UserName.Contains(filter.SearchText));
+
+
+                pagedData = pagedData.OrderBy(filter.Sort);
+
+
+
+                pagedData = pagedData.Skip((filter.PageNumber - 1) * filter.PageSize)
+                    .Take(filter.PageSize);
+
+                var totalRecords =  _userManager.Users.Count();
+                var totalPagees = Math.Ceiling((decimal)totalRecords / filter.PageSize);
+
+                return Ok(new PagedResponse<List<ApplicationUser>>(pagedData.ToList(), filter.PageNumber, filter.PageSize) { TotalRecords = totalRecords, TotalPages = (int)totalPagees });
+
+            }
+            catch (Exception ex)
+            {
+                //log error
+                return BadRequest(new FailedResponse
+                {
+                    Errors = new List<string> { ex.Message }
+                });
+            }
+        }
+
 
         [HttpPost]
         [Route("Register")]

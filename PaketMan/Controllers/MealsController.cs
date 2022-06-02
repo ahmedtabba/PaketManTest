@@ -28,24 +28,23 @@ namespace PaketMan.Controllers
         {
             try
             {
-                var validFilter = new MealRequestParams(filter.PageNumber, filter.PageSize);
                 var pagedData = filter.RestaurantId.HasValue? await _mealRepository.GetByRestaurantId(filter.RestaurantId.Value) : await _mealRepository.GetAll();
 
-                if (!string.IsNullOrWhiteSpace(validFilter.SearchText))
-                    pagedData = pagedData.Where(x => x.Name.Contains(validFilter.SearchText));
+                if (!string.IsNullOrWhiteSpace(filter.SearchText))
+                    pagedData = pagedData.Where(x => x.Name.Contains(filter.SearchText));
 
 
                 pagedData = pagedData.OrderBy(filter.Sort);
 
 
 
-                pagedData = pagedData.Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
-                    .Take(validFilter.PageSize);
+                pagedData = pagedData.Skip((filter.PageNumber - 1) * filter.PageSize)
+                    .Take(filter.PageSize);
 
                 var totalRecords = (await _mealRepository.GetAll()).Count();
-                var totalPagees = Math.Ceiling((decimal)totalRecords / validFilter.PageSize);
+                var totalPagees = Math.Ceiling((decimal)totalRecords / filter.PageSize);
 
-                return Ok(new PagedResponse<List<Meal>>(pagedData.ToList(), validFilter.PageNumber, validFilter.PageSize) { TotalRecords = totalRecords, TotalPages = (int)totalPagees });
+                return Ok(new PagedResponse<List<Meal>>(pagedData.ToList(), filter.PageNumber, filter.PageSize) { TotalRecords = totalRecords, TotalPages = (int)totalPagees });
 
             }
             catch (Exception ex)

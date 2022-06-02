@@ -1,18 +1,44 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Identity;
 using Npgsql;
+using PaketMan.Context;
 using PaketMan.Models;
 
 namespace PaketMan.Services
 {
     public class UserStore : IUserStore<ApplicationUser>, IUserEmailStore<ApplicationUser>, IUserPhoneNumberStore<ApplicationUser>,
-     IUserTwoFactorStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>,IUserRoleStore<ApplicationUser>
+     IUserTwoFactorStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>,IUserRoleStore<ApplicationUser>, IQueryableUserStore<ApplicationUser>
     {
         private readonly string _connectionString;
+        private readonly DapperContext _context;
 
-        public UserStore(IConfiguration configuration)
+       
+
+        public UserStore(DapperContext context)
+        {
+            _context = context;
+        }
+
+       
+
+        public UserStore(IConfiguration configuration, DapperContext context)
         {
             _connectionString = configuration.GetConnectionString("SqlConnection");
+            _context = context;
+        }
+
+        IQueryable<ApplicationUser> IQueryableUserStore<ApplicationUser>.Users
+        {
+            get
+            {
+                var query = $"SELECT * FROM \"ApplicationUser\";";
+                using (var connection = _context.CreateConnection())
+                {
+                    connection.Open();
+                    var users = connection.Query<ApplicationUser>(query);
+                    return users.AsQueryable();
+                }
+            }
         }
 
         public async Task<IdentityResult> CreateAsync(ApplicationUser user, CancellationToken cancellationToken)
